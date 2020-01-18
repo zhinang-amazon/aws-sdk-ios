@@ -31,6 +31,8 @@
 
 @implementation AWSUserPoolNewPasswordRequiredViewController
 
+static NSString *const AWSUserPool_EmailVerifiedKey = @"email_verified";
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -75,9 +77,14 @@
 - (IBAction)onSignIn:(id)sender {
     NSString *password = [self.tableDelegate getValueForCell:self.passwordRow
                                                 forTableView:self.tableView];
-    
+    NSMutableDictionary *filteredDictionary = [[NSMutableDictionary alloc] initWithCapacity:self.passwordRequiredInput.userAttributes.count];
+    [self.passwordRequiredInput.userAttributes enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        if (![key isEqualToString:AWSUserPool_EmailVerifiedKey]) {
+            filteredDictionary[key] = obj;
+        }
+    }];
     AWSCognitoIdentityNewPasswordRequiredDetails *details = [[AWSCognitoIdentityNewPasswordRequiredDetails alloc] initWithProposedPassword:password
-                                                                                                                            userAttributes:self.passwordRequiredInput.userAttributes];
+                                                                                                                            userAttributes:filteredDictionary];
     [self.passRequiredCompletionSource setResult:details];
 }
 
