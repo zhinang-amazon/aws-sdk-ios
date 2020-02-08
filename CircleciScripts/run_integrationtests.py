@@ -37,7 +37,7 @@ def runtest(otherargments, projectPath, schemeName, projectName, destination, de
     exit_code = runcommand(testcommand,timeout, pipeout = rawoutput)
     rawoutput.close()
     print("Formatting test result .......")
-    xcprettycommand = "cat raw.log | xcpretty -r junit  | tee xcpretty.log"
+    xcprettycommand = "cp raw.log xcpretty.log"
     runcommand(xcprettycommand)
     return exit_code    
 
