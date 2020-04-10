@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, AWSPinpointPushEventSourceType) {
     AWSPinpointPushEventSourceTypeUnknown
 };
 
+@property (nonatomic) UIViewController *rootViewController;
+
 #pragma mark - Notification Helpers
 /**
  Returns a Boolean indicating whether the app is currently registered for remote notifications.

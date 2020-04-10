@@ -22,6 +22,7 @@
 #import "AWSPinpointEvent.h"
 #import "AWSPinpointContext.h"
 #import "AWSPinpointConfiguration.h"
+#import "AWSPinpoint/AWSPinpoint-Swift.h"
 
 static NSString *const AWSCampaignDeepLinkKey = @"deeplink";
 static NSString *const AWSAttributeApplicationStateKey = @"applicationState";
@@ -151,6 +152,16 @@ NSString *const AWSPinpointJourneyKey = @"journey";
             });
         }
     }
+    
+    NSDictionary *inAppMessagingData = userInfo[AWSDataKey][AWSPinpointKey][@"inAppMessaging"];
+    if ([inAppMessagingData isKindOfClass:[NSDictionary class]]) {
+        AWSPinpointSplashView *splashView = [[AWSPinpointSplashView alloc] initWithData:inAppMessagingData];
+        UIViewController *vc = [UIViewController new];
+        [vc.view addSubview:splashView];
+        [self.rootViewController presentViewController:vc
+                                              animated:YES
+                                            completion:^(void){}];
+    }
 }
 
 - (void)handleNotificationReceived:(UIApplication *) app
@@ -177,6 +188,9 @@ NSString *const AWSPinpointJourneyKey = @"journey";
             [self addGlobalEventSourceMetadata:metadata withEventSourceType:eventSourceType];
             [self recordMessageReceivedEventForNotification:userInfo
                                          withPushActionType:pushActionType];
+            if (shouldHandleNotificationDeepLink) {
+                [self handleNotificationDeepLinkForNotification:userInfo];
+            }
             break;
         }
         case AWSPinpointPushActionTypeReceivedForeground: {
@@ -186,6 +200,9 @@ NSString *const AWSPinpointJourneyKey = @"journey";
             // the session should not contribute to the new push notification that is being received
             [self recordMessageReceivedEventForNotification:userInfo
                                          withPushActionType:pushActionType];
+            if (shouldHandleNotificationDeepLink) {
+                [self handleNotificationDeepLinkForNotification:userInfo];
+            }
             break;
         }
         case AWSPinpointPushActionTypeUnknown: {

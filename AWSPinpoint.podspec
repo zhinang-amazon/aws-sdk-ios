@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
                      :tag => s.version}
   s.requires_arc = true
   s.dependency 'AWSCore', '2.13.1'
-  s.source_files = 'AWSPinpoint/*.{h,m}', 'AWSPinpoint/**/*.{h,m}'
+  s.source_files = 'AWSPinpoint/*.{h,m,swift}', 'AWSPinpoint/**/*.{h,m,swift}'
   s.private_header_files = 'AWSPinpoint/Internal/*.h'
 end

@@ -523,6 +523,8 @@
 		B5DD456222CA6E01003871AE /* AWSConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DD456122CA6E01003871AE /* AWSConnectTests.swift */; };
 		B5DD458622CAD272003871AE /* AWSTestUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB8EF2E1C6A69A00098B15B /* AWSTestUtility.m */; };
 		C436FB0A2437EBE30004738F /* AWSPinpointNotificationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C436FB092437EBE30004738F /* AWSPinpointNotificationManagerTests.m */; };
+		C436FB15243FC5310004738F /* AWSPinpointSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB13243FC5310004738F /* AWSPinpointSplashView.swift */; };
+		C436FB16243FC5310004738F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB14243FC5310004738F /* UIColorExtensions.swift */; };
 		CE0D41701C6A66E5006B91B5 /* AWSCore.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0D416F1C6A66E5006B91B5 /* AWSCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE0D42231C6A673E006B91B5 /* AWSCredentialsProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0D41851C6A673E006B91B5 /* AWSCredentialsProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE0D42241C6A673E006B91B5 /* AWSCredentialsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0D41861C6A673E006B91B5 /* AWSCredentialsProvider.m */; };
@@ -3897,6 +3899,8 @@
 		B5DD456022CA6E00003871AE /* AWSConnectTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AWSConnectTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		B5DD456122CA6E01003871AE /* AWSConnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectTests.swift; sourceTree = "<group>"; };
 		C436FB092437EBE30004738F /* AWSPinpointNotificationManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWSPinpointNotificationManagerTests.m; sourceTree = "<group>"; };
+		C436FB13243FC5310004738F /* AWSPinpointSplashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPinpointSplashView.swift; sourceTree = "<group>"; };
+		C436FB14243FC5310004738F /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		CE0D416D1C6A66E5006B91B5 /* AWSCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWSCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE0D416F1C6A66E5006B91B5 /* AWSCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWSCore.h; sourceTree = "<group>"; };
 		CE0D41711C6A66E5006B91B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -6027,6 +6031,7 @@
 		18798F7F1DEF9EA900BC419B /* AWSPinpoint */ = {
 			isa = PBXGroup;
 			children = (
+				C436FB12243FC5030004738F /* InAppMessaging */,
 				18798FA41DEF9F2B00BC419B /* AWSPinpoint.h */,
 				18798FAD1DEF9F2B00BC419B /* AWSPinpointAnalyticsClient.h */,
 				18798FAE1DEF9F2B00BC419B /* AWSPinpointAnalyticsClient.m */,
@@ -6427,6 +6432,15 @@
 				B5DD455222CA6475003871AE /* Info.plist */,
 			);
 			path = AWSConnectUnitTests;
+			sourceTree = "<group>";
+		};
+		C436FB12243FC5030004738F /* InAppMessaging */ = {
+			isa = PBXGroup;
+			children = (
+				C436FB13243FC5310004738F /* AWSPinpointSplashView.swift */,
+				C436FB14243FC5310004738F /* UIColorExtensions.swift */,
+			);
+			path = InAppMessaging;
 			sourceTree = "<group>";
 		};
 		CE0D41531C6A66A9006B91B5 = {
@@ -11401,6 +11415,7 @@
 					};
 					18798F7D1DEF9EA900BC419B = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 1130;
 					};
 					18798F861DEF9EA900BC419B = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -12983,6 +12998,8 @@
 				18798FDE1DEF9F2B00BC419B /* AWSPinpointEvent.m in Sources */,
 				18798FED1DEF9F2B00BC419B /* AWSPinpointTargetingService.m in Sources */,
 				18798FF41DEF9F2B00BC419B /* AWSPinpointDateUtils.m in Sources */,
+				C436FB16243FC5310004738F /* UIColorExtensions.swift in Sources */,
+				C436FB15243FC5310004738F /* AWSPinpointSplashView.swift in Sources */,
 				18798FEB1DEF9F2B00BC419B /* AWSPinpointTargetingResources.m in Sources */,
 				18798FE41DEF9F2B00BC419B /* AWSPinpointService.m in Sources */,
 				18798FE01DEF9F2B00BC419B /* AWSPinpointEventRecorder.m in Sources */,
@@ -16260,6 +16277,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -16272,6 +16290,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amazonaws.sdk.ios.AWSPinpoint;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -16279,6 +16299,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -16291,12 +16312,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.amazonaws.sdk.ios.AWSPinpoint;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 		18798F911DEF9EAA00BC419B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				INFOPLIST_FILE = AWSPinpointTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -16314,6 +16337,7 @@
 		18798F921DEF9EAA00BC419B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				INFOPLIST_FILE = AWSPinpointTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -16331,6 +16355,7 @@
 		18798FA21DEF9EF900BC419B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				INFOPLIST_FILE = AWSPinpointUnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -16348,6 +16373,7 @@
 		18798FA31DEF9EF900BC419B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				INFOPLIST_FILE = AWSPinpointUnitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
