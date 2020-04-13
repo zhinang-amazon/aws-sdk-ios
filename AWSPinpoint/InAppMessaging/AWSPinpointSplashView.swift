@@ -42,7 +42,7 @@ import Foundation
 }
 
 @available(iOS 11.0, *)
-public class AWSPinpointSplashView: UIView {
+public class AWSPinpointSplashViewController: UIViewController {
     private let model: AWSPinpointSplashModel
     private let titleLabel = UILabel()
     private let messageLabel = UILabel()
@@ -57,13 +57,15 @@ public class AWSPinpointSplashView: UIView {
         } else {
             return nil
         }
-        super.init(frame: .zero)
-        //translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = UIColor.from(hex: model.backgroundHexColor)
+        super.init(nibName: nil, bundle: nil)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
         titleLabel.text = model.title
-        titleLabel.font = .systemFont(ofSize: 16)
+        titleLabel.font = .boldSystemFont(ofSize: 20)
         messageLabel.text = model.message
-        messageLabel.font = .systemFont(ofSize: 12)
+        messageLabel.font = .systemFont(ofSize: 14)
         
         backgroundImage.contentMode = UIView.ContentMode.scaleAspectFit
         if let imageURL = model.backgroundImageURL {
@@ -103,37 +105,38 @@ public class AWSPinpointSplashView: UIView {
     }
     
     private func setConstraints() {
-        addSubview(backgroundImage)
-        addSubview(contentStackView)
+        view.addSubview(backgroundImage)
+        view.addSubview(contentStackView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(messageLabel)
         contentStackView.addArrangedSubview(primaryButton)
         contentStackView.addArrangedSubview(secondaryButton)
         let windowFrame = UIApplication.shared.keyWindow!.frame
         let constraints = [
-            widthAnchor.constraint(equalToConstant: 400),
-            heightAnchor.constraint(equalToConstant: 600),
-            backgroundImage.topAnchor.constraint(equalTo: self.topAnchor),
-            backgroundImage.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            backgroundImage.leftAnchor.constraint(equalTo: self.leftAnchor),
-            backgroundImage.rightAnchor.constraint(equalTo: self.rightAnchor),
-            contentStackView.topAnchor.constraint(equalTo: self.topAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            contentStackView.leftAnchor.constraint(equalTo: self.leftAnchor, constant:20),
-            contentStackView.rightAnchor.constraint(equalTo: self.rightAnchor, constant:-20),
-            titleLabel.heightAnchor.constraint(equalToConstant: 30),
+            //view.widthAnchor.constraint(equalToConstant: 400),
+            //view.heightAnchor.constraint(equalToConstant: 600),
+            backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor),
+            backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor),
+            //contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:-20),
+            contentStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:20),
+            contentStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant:-20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 60),
             titleLabel.leftAnchor.constraint(equalTo: contentStackView.leftAnchor, constant:10),
             titleLabel.rightAnchor.constraint(equalTo: contentStackView.rightAnchor, constant:-10),
-            messageLabel.heightAnchor.constraint(equalToConstant: 30),
+            messageLabel.heightAnchor.constraint(equalToConstant: 40),
             messageLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             messageLabel.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
-            primaryButton.heightAnchor.constraint(equalToConstant: 30),
+            primaryButton.heightAnchor.constraint(equalToConstant: 40),
             primaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             primaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
-            secondaryButton.heightAnchor.constraint(equalToConstant: 30),
+            secondaryButton.heightAnchor.constraint(equalToConstant: 40),
             secondaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             secondaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor)
         ]
+        contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         NSLayoutConstraint.activate(constraints)
     }
     
@@ -145,6 +148,11 @@ public class AWSPinpointSplashView: UIView {
 //            rightAnchor.constraint(equalTo: newSuperview!.rightAnchor)
 //        ]
 //        NSLayoutConstraint.activate(constraints)
+//    }
+    
+//    public override func viewWillLayoutSubviews() {
+//        view.updateConstraints()
+//        super.viewWillLayoutSubviews()
 //    }
     
     @objc func primaryButtonPressed() {
