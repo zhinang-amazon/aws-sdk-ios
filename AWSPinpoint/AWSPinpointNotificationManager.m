@@ -39,6 +39,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
 @interface AWSPinpointNotificationManager()
 @property (nonatomic, strong) AWSPinpointContext *context;
 @property (nonatomic) AWSPinpointPushEventSourceType previousEventSourceType;
+@property (nonatomic, strong) InAppMessagingModule *inAppMessagingModule;
 @end
 
 @interface AWSPinpointAnalyticsClient()
@@ -62,6 +63,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
     if (self = [super init]) {
         _context = context;
         _previousEventSourceType = AWSPinpointPushEventSourceTypeUnknown;
+        _inAppMessagingModule = [[InAppMessagingModule alloc] initWithDelegate: self];
     }
     return self;
 }
@@ -155,12 +157,16 @@ NSString *const AWSPinpointJourneyKey = @"journey";
     
     NSDictionary *inAppMessagingData = userInfo[AWSDataKey][AWSPinpointKey][@"inAppMessaging"];
     if ([inAppMessagingData isKindOfClass:[NSDictionary class]]) {
-        AWSPinpointSplashViewController *splashViewController = [[AWSPinpointSplashViewController alloc] initWithData:inAppMessagingData[@"splash"]];
+//        AWSPinpointSplashViewController *splashViewController = [[AWSPinpointSplashViewController alloc] initWithData:inAppMessagingData[@"splash"]];
         //UIViewController *vc = [UIViewController new];
         //[vc.view addSubview:splashView];
-        [self.rootViewController presentViewController:splashViewController
-                                              animated:YES
-                                            completion:^(void){}];
+//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:splashViewController animated:YES completion:^(void){}];
+//        [self.rootViewController presentViewController:splashViewController
+//                                              animated:YES
+//                                            completion:^(void){}];
+        
+        [self.inAppMessagingModule displayIAMWithData:inAppMessagingData];
+        
     }
 }
 
@@ -392,6 +398,22 @@ NSString *const AWSPinpointJourneyKey = @"journey";
         AWSDDLogError(@"No valid Pinpoint Push payload found");
     }
     return metadata;
+}
+
+#pragma mark - InAppMessagingDelegate
+
+- (void)primaryButtonClickedWithMessage: (AWSPinpointSplashModel*) message {
+    NSURL *primaryButtonURL = [[NSURL alloc] initWithString:message.customParam[@"primaryButtonURL"]];
+    [[UIApplication sharedApplication] openURL:primaryButtonURL];
+}
+
+- (void)secondaryButtonClickedWithMessage: (AWSPinpointSplashModel*) message {
+    NSURL *secondaryButtonURL = [[NSURL alloc] initWithString:message.customParam[@"secondaryButtonURL"]];
+    [[UIApplication sharedApplication] openURL:secondaryButtonURL];
+}
+
+- (void)messageDismissedWithMessage: (AWSPinpointSplashModel*) message {
+    AWSDDLogVerbose(@"Message dismissed: %@", message.title);
 }
 
 @end

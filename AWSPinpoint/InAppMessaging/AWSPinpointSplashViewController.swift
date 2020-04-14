@@ -1,5 +1,5 @@
 //
-//  AWSPinpointSplashView.swift
+//  AWSPinpointSplashViewController.swift
 //  AWSPinpoint
 //
 //  Created by Guan, Zhinan on 4/9/20.
@@ -7,56 +7,70 @@
 
 import Foundation
 
-@objc public class AWSPinpointSplashModel: NSObject, Codable {
-    let title: String
-    let message: String
-    let backgroundHexColor: String
-    let backgroundImageURL: URL? // solid background color if nil
+@objc public class AWSPinpointSplashModel: NSObject {
+    @objc public let id: String
+    @objc public let name: String
+    @objc public let campaignId: String
+    @objc public let title: String
+    @objc public let message: String
+    @objc public let backgroundHexColor: String
+    @objc public let backgroundImageURL: URL? // solid background color if nil
     
-    let primaryButtonText: String
-    let primaryButtonTextColor: String? // system default
-    let primaryButtonHexColor: String? // system default
-    let primaryButtonURL: URL
+    @objc public let primaryButtonText: String
+    @objc public let primaryButtonTextColor: String? // system default
+    @objc public let primaryButtonHexColor: String? // system default
+    //@objc public let primaryButtonURL: URL
     
-    let secondaryButtonText: String? // not shown if nil
-    let secondaryButtonTextColor: String? // system default
-    let secondaryButtonHexColor: String? // default transparent
-    let secondaryButtonURL: URL? // default dismiss
+    @objc public let secondaryButtonText: String? // not shown if nil
+    @objc public let secondaryButtonTextColor: String? // system default
+    @objc public let secondaryButtonHexColor: String? // default transparent
+    //@objc public let secondaryButtonURL: URL? // default dismiss
+    
+    @objc public let customParam: [String: Any]
     
     init?(data: [String: Any]) {
-        self.title = data["title"] as! String
-        self.message = data["message"] as! String
-        self.backgroundHexColor = data["backgroundHexColor"] as! String
-        self.backgroundImageURL = URL(string: data["backgroundImageURL"] as! String)
+        self.id = data["id"] as! String
+        self.name = data["name"] as! String
+        self.campaignId = data["campaignId"] as! String
+        let uiConfiguration = data["uiConfiguration"] as! [String: Any]
+        self.title = uiConfiguration["title"] as! String
+        self.message = uiConfiguration["message"] as! String
+        self.backgroundHexColor = uiConfiguration["backgroundHexColor"] as! String
+        self.backgroundImageURL = URL(string: uiConfiguration["backgroundImageURL"] as! String)
         
-        self.primaryButtonText = data["primaryButtonText"] as! String
-        self.primaryButtonTextColor = data["primaryButtonTextColor"] as! String
-        self.primaryButtonHexColor = data["primaryButtonHexColor"] as! String
-        self.primaryButtonURL = URL(string: data["primaryButtonURL"] as! String)!
+        self.primaryButtonText = uiConfiguration["primaryButtonText"] as! String
+        self.primaryButtonTextColor = uiConfiguration["primaryButtonTextColor"] as! String
+        self.primaryButtonHexColor = uiConfiguration["primaryButtonHexColor"] as! String
+        //self.primaryButtonURL = URL(string: data["primaryButtonURL"] as! String)!
 
-        self.secondaryButtonText = data["secondaryButtonText"] as! String
-        self.secondaryButtonTextColor = data["secondaryButtonTextColor"] as! String
-        self.secondaryButtonHexColor = data["secondaryButtonHexColor"] as! String
-        self.secondaryButtonURL = URL(string: data["secondaryButtonURL"] as! String)
+        self.secondaryButtonText = uiConfiguration["secondaryButtonText"] as! String
+        self.secondaryButtonTextColor = uiConfiguration["secondaryButtonTextColor"] as! String
+        self.secondaryButtonHexColor = uiConfiguration["secondaryButtonHexColor"] as! String
+        //self.secondaryButtonURL = URL(string: data["secondaryButtonURL"] as! String)
+        
+        self.customParam = data["customParam"] as! [String: Any]
     }
 }
 
-@available(iOS 11.0, *)
+@available(iOS 9.0, *)
 public class AWSPinpointSplashViewController: UIViewController {
     private let model: AWSPinpointSplashModel
+    private let delegate: InAppMessagingDelegate
     private let titleLabel = UILabel()
     private let messageLabel = UILabel()
     private let primaryButton = UIButton()
     private let secondaryButton = UIButton()
     private var backgroundImage = UIImageView()
     private let contentStackView = UIStackView()
+    private var userDismissed = true
     
-    @objc public init?(data: Dictionary<String, Any>) {
-        if let m = AWSPinpointSplashModel(data: data) {
-            self.model = m
-        } else {
-            return nil
-        }
+    @objc public init(model: AWSPinpointSplashModel, delegate: InAppMessagingDelegate) {
+        //if let m = AWSPinpointSplashModel(data: data) {
+        self.model = model
+        self.delegate = delegate
+//        } else {
+//            return nil
+//        }
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,14 +170,26 @@ public class AWSPinpointSplashViewController: UIViewController {
 //    }
     
     @objc func primaryButtonPressed() {
-        UIApplication.shared.openURL(model.primaryButtonURL)
+        userDismissed = false
+        //UIApplication.shared.openURL(model.primaryButtonURL)
+        delegate.primaryButtonClicked(message: model)
+        dismiss(animated: true, completion: nil)
     }
 
     @objc func secondaryButtonPressed() {
-        if let secondaryButtonURL = model.secondaryButtonURL {
-            UIApplication.shared.openURL(secondaryButtonURL)
-        } else {
-            
+        userDismissed = false
+//        if let secondaryButtonURL = model.secondaryButtonURL {
+//            UIApplication.shared.openURL(secondaryButtonURL)
+//        }
+        delegate.secondaryButtonClicked(message: model)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override public func viewDidDisappear(_ animated: Bool) {
+        print("userDismissed: \(userDismissed)")
+        if userDismissed {
+            delegate.messageDismissed(message: model)
         }
+        super.viewDidDisappear(animated)
     }
 }
