@@ -1,17 +1,17 @@
 {
-  "splash": {
-  	"id": "12345678",
-  	"name": "testSplashIAM",
+  "dialog": {
+  	"id": "87654321",
+  	"name": "testDialogIAM",
   	"campaignId": "1234567890abcdef",
   	"uiConfiguration": {
-  		"title": "Message Title",
-  		"message": "This is a test message that is sent from push.",
+  		"title": "Dialog Message",
+  		"message": "This is a test dialog message that is fetched from server",
   		"backgroundHexColor": "#f0e8eb",
-  		"backgroundImageURL": "https://dummyimage.com/600x3:5/0099ff&text=dummyimage_600x1000",
-  		"primaryButtonText": "primaryButton Google",
+  		"backgroundImageURL": "https://dummyimage.com/600x1:1/0099ff&text=dummyimage_600x600",
+  		"primaryButtonText": "Primary Button",
   		"primaryButtonTextColor": "#FFFFFF",
   		"primaryButtonHexColor": "#F3A721",
-  		"secondaryButtonText": "secondaryButton Amazon",
+  		"secondaryButtonText": "Secondary Button",
   		"secondaryButtonTextColor": "#000000",
   		"secondaryButtonHexColor": "#FFFFFF"
   	},

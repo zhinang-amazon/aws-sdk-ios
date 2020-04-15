@@ -402,17 +402,17 @@ NSString *const AWSPinpointJourneyKey = @"journey";
 
 #pragma mark - InAppMessagingDelegate
 
-- (void)primaryButtonClickedWithMessage: (AWSPinpointSplashModel*) message {
+- (void)primaryButtonClickedWithMessage: (AWSPinpointIAMModel*) message {
     NSURL *primaryButtonURL = [[NSURL alloc] initWithString:message.customParam[@"primaryButtonURL"]];
     [[UIApplication sharedApplication] openURL:primaryButtonURL];
 }
 
-- (void)secondaryButtonClickedWithMessage: (AWSPinpointSplashModel*) message {
+- (void)secondaryButtonClickedWithMessage: (AWSPinpointIAMModel*) message {
     NSURL *secondaryButtonURL = [[NSURL alloc] initWithString:message.customParam[@"secondaryButtonURL"]];
     [[UIApplication sharedApplication] openURL:secondaryButtonURL];
 }
 
-- (void)messageDismissedWithMessage: (AWSPinpointSplashModel*) message {
+- (void)messageDismissedWithMessage: (AWSPinpointIAMModel*) message {
     AWSDDLogVerbose(@"Message dismissed: %@", message.title);
 }
 

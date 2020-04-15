@@ -1,59 +1,14 @@
 //
-//  AWSPinpointSplashViewController.swift
+//  AWSPinpointDialogViewController.swift
 //  AWSPinpoint
 //
-//  Created by Guan, Zhinan on 4/9/20.
+//  Created by Guan, Zhinan on 4/15/20.
 //
 
-import Foundation
-
-@objc public class AWSPinpointIAMModel: NSObject, Codable {
-    @objc public let id: String
-    @objc public let name: String
-    @objc public let campaignId: String
-    @objc public let title: String
-    @objc public let message: String
-    @objc public let backgroundHexColor: String
-    @objc public let backgroundImageURL: URL? // solid background color if nil
-    
-    @objc public let primaryButtonText: String
-    @objc public let primaryButtonTextColor: String? // system default
-    @objc public let primaryButtonHexColor: String? // system default
-    //@objc public let primaryButtonURL: URL
-    
-    @objc public let secondaryButtonText: String? // not shown if nil
-    @objc public let secondaryButtonTextColor: String? // system default
-    @objc public let secondaryButtonHexColor: String? // default transparent
-    //@objc public let secondaryButtonURL: URL? // default dismiss
-    
-    @objc public let customParam: [String: String]
-    
-    init?(data: [String: Any]) {
-        self.id = data["id"] as! String
-        self.name = data["name"] as! String
-        self.campaignId = data["campaignId"] as! String
-        let uiConfiguration = data["uiConfiguration"] as! [String: Any]
-        self.title = uiConfiguration["title"] as! String
-        self.message = uiConfiguration["message"] as! String
-        self.backgroundHexColor = uiConfiguration["backgroundHexColor"] as! String
-        self.backgroundImageURL = URL(string: uiConfiguration["backgroundImageURL"] as! String)
-        
-        self.primaryButtonText = uiConfiguration["primaryButtonText"] as! String
-        self.primaryButtonTextColor = uiConfiguration["primaryButtonTextColor"] as! String
-        self.primaryButtonHexColor = uiConfiguration["primaryButtonHexColor"] as! String
-        //self.primaryButtonURL = URL(string: data["primaryButtonURL"] as! String)!
-
-        self.secondaryButtonText = uiConfiguration["secondaryButtonText"] as! String
-        self.secondaryButtonTextColor = uiConfiguration["secondaryButtonTextColor"] as! String
-        self.secondaryButtonHexColor = uiConfiguration["secondaryButtonHexColor"] as! String
-        //self.secondaryButtonURL = URL(string: data["secondaryButtonURL"] as! String)
-        
-        self.customParam = data["customParam"] as! [String: String]
-    }
-}
+import UIKit
 
 @available(iOS 9.0, *)
-public class AWSPinpointSplashViewController: UIViewController {
+public class AWSPinpointDialogViewController: UIViewController {
     private let model: AWSPinpointIAMModel
     private let delegate: InAppMessagingDelegate
     private let titleLabel = UILabel()
@@ -62,20 +17,19 @@ public class AWSPinpointSplashViewController: UIViewController {
     private let secondaryButton = UIButton()
     private var backgroundImage = UIImageView()
     private let contentStackView = UIStackView()
+    private let contentBackgroundView = UIView()
     private var userDismissed = true
     
     @objc public init(model: AWSPinpointIAMModel, delegate: InAppMessagingDelegate) {
-        //if let m = AWSPinpointSplashModel(data: data) {
         self.model = model
         self.delegate = delegate
-//        } else {
-//            return nil
-//        }
+
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
+        contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         titleLabel.text = model.title
         titleLabel.font = .boldSystemFont(ofSize: 20)
         messageLabel.text = model.message
@@ -83,6 +37,7 @@ public class AWSPinpointSplashViewController: UIViewController {
         messageLabel.numberOfLines = 0
         
         backgroundImage.contentMode = UIView.ContentMode.scaleAspectFit
+        backgroundImage.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
         if let imageURL = model.backgroundImageURL {
             backgroundImage.downloaded(from: imageURL)
         }
@@ -111,7 +66,11 @@ public class AWSPinpointSplashViewController: UIViewController {
         
         contentStackView.axis = .vertical
         contentStackView.alignment = .center
-        contentStackView.spacing = 8
+        contentStackView.spacing = 2
+        
+        contentBackgroundView.backgroundColor = .white
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap(_:)))
+        view.addGestureRecognizer(tap)
         setConstraints()
     }
     
@@ -120,33 +79,41 @@ public class AWSPinpointSplashViewController: UIViewController {
     }
     
     private func setConstraints() {
-        view.addSubview(backgroundImage)
+        view.addSubview(contentBackgroundView)
         view.addSubview(contentStackView)
+        
+        contentStackView.addArrangedSubview(backgroundImage)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(messageLabel)
         contentStackView.addArrangedSubview(primaryButton)
         contentStackView.addArrangedSubview(secondaryButton)
-        let windowFrame = UIApplication.shared.keyWindow!.frame
         let constraints = [
-            //view.widthAnchor.constraint(equalToConstant: 400),
-            //view.heightAnchor.constraint(equalToConstant: 600),
-            backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor),
-            backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor),
-            //contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:-20),
-            contentStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:20),
-            contentStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant:-20),
+            contentStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.8),
+            contentStackView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8),
+            contentStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            contentStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            contentBackgroundView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
+            contentBackgroundView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+            contentBackgroundView.leftAnchor.constraint(equalTo: contentStackView.leftAnchor),
+            contentBackgroundView.rightAnchor.constraint(equalTo: contentStackView.rightAnchor),
+            
+            backgroundImage.heightAnchor.constraint(equalToConstant: 300),
+            backgroundImage.leftAnchor.constraint(equalTo: contentStackView.leftAnchor),
+            backgroundImage.rightAnchor.constraint(equalTo: contentStackView.rightAnchor),
+            
             titleLabel.heightAnchor.constraint(equalToConstant: 60),
             titleLabel.leftAnchor.constraint(equalTo: contentStackView.leftAnchor, constant:10),
             titleLabel.rightAnchor.constraint(equalTo: contentStackView.rightAnchor, constant:-10),
+            
             messageLabel.heightAnchor.constraint(equalToConstant: 80),
             messageLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             messageLabel.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
+            
             primaryButton.heightAnchor.constraint(equalToConstant: 40),
             primaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             primaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
+            
             secondaryButton.heightAnchor.constraint(equalToConstant: 40),
             secondaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             secondaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor)
@@ -155,33 +122,14 @@ public class AWSPinpointSplashViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-//    public override func willMove(toSuperview newSuperview: UIView?) {
-//        let constraints = [
-//            topAnchor.constraint(equalTo: newSuperview!.topAnchor),
-//            bottomAnchor.constraint(equalTo: newSuperview!.bottomAnchor),
-//            leftAnchor.constraint(equalTo: newSuperview!.leftAnchor),
-//            rightAnchor.constraint(equalTo: newSuperview!.rightAnchor)
-//        ]
-//        NSLayoutConstraint.activate(constraints)
-//    }
-    
-//    public override func viewWillLayoutSubviews() {
-//        view.updateConstraints()
-//        super.viewWillLayoutSubviews()
-//    }
-    
     @objc func primaryButtonPressed() {
         userDismissed = false
-        //UIApplication.shared.openURL(model.primaryButtonURL)
         delegate.primaryButtonClicked(message: model)
         dismiss(animated: true, completion: nil)
     }
 
     @objc func secondaryButtonPressed() {
         userDismissed = false
-//        if let secondaryButtonURL = model.secondaryButtonURL {
-//            UIApplication.shared.openURL(secondaryButtonURL)
-//        }
         delegate.secondaryButtonClicked(message: model)
         dismiss(animated: true, completion: nil)
     }
@@ -192,5 +140,9 @@ public class AWSPinpointSplashViewController: UIViewController {
             delegate.messageDismissed(message: model)
         }
         super.viewDidDisappear(animated)
+    }
+    
+    @objc func handleBackgroundTap(_ sender: UITapGestureRecognizer? = nil) {
+        dismiss(animated: true, completion: nil)
     }
 }

@@ -8,17 +8,17 @@
 import UIKit
 
 @objc public protocol InAppMessagingDelegate {
-    @objc func primaryButtonClicked(message: AWSPinpointSplashModel)
-    @objc func secondaryButtonClicked(message: AWSPinpointSplashModel)
+    @objc func primaryButtonClicked(message: AWSPinpointIAMModel)
+    @objc func secondaryButtonClicked(message: AWSPinpointIAMModel)
     //@objc func messageClicked(message: AWSPinpointSplashModel)
-    @objc func messageDismissed(message: AWSPinpointSplashModel)
+    @objc func messageDismissed(message: AWSPinpointIAMModel)
 }
 
 @objc public class InAppMessagingModule: NSObject {
     var enabled: Bool = true
     let delegate: InAppMessagingDelegate
     var rootViewController: UIViewController?
-    var queue: [AWSPinpointSplashModel] = []
+    var queue: [AWSPinpointIAMModel] = []
     var activeIAMShown = false
     
     @objc public init(delegate: InAppMessagingDelegate) {
@@ -53,6 +53,32 @@ import UIKit
         }
     }
 
+    public func retrieveSplashIAM() {
+        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data_splash", ofType: "json")
+        {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let modelDict = try JSONSerialization.jsonObject(with: data)
+                self.displayIAM(data: modelDict as! [String : Any])
+            } catch {
+                print("invalid data from retrieveEligibleInAppMessages")
+            }
+        }
+    }
+    
+    public func retrieveDialogIAM() {
+        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data_dialog", ofType: "json")
+        {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let modelDict = try JSONSerialization.jsonObject(with: data)
+                self.displayIAM(data: modelDict as! [String : Any])
+            } catch {
+                print("invalid data from retrieveEligibleInAppMessages")
+            }
+        }
+    }
+
     @objc public func displayIAM(data: [String: Any]) {
         DispatchQueue.main.async {
             if self.rootViewController == nil {
@@ -62,19 +88,25 @@ import UIKit
                 print("IAM rootViewController not configured")
                 return
             }
-            guard let splashModel = AWSPinpointSplashModel(data: data["splash"] as! [String : Any]) else {
-                print("invalid IAM data")
-                return
-            }
             guard #available(iOS 9.0, *) else {
                 print("iOS version below 9.0")
                 return
             }
-            let splashVC = AWSPinpointSplashViewController(model: splashModel,
-                                                           delegate: self.delegate)
-            self.topViewController()?.present(splashVC, animated: true, completion: {
-                print("splash IAM shown")
-            })
+            if let splashData = data["splash"] as? [String: Any] {
+                let model = AWSPinpointIAMModel(data: splashData)!
+                let iamVC = AWSPinpointSplashViewController(model: model,
+                                                        delegate: self.delegate)
+                self.topViewController()?.present(iamVC, animated: true, completion: {
+                    print("splash IAM shown")
+                })
+            } else if let dialogData = data["dialog"] as? [String: Any] {
+                let model = AWSPinpointIAMModel(data: dialogData)!
+                let iamVC = AWSPinpointDialogViewController(model: model,
+                                                        delegate: self.delegate)
+                self.topViewController()?.present(iamVC, animated: true, completion: {
+                    print("dialog IAM shown")
+                })
+            }
         }
     }
     

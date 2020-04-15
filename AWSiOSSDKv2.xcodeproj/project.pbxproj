@@ -524,7 +524,6 @@
 		B5DD458622CAD272003871AE /* AWSTestUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB8EF2E1C6A69A00098B15B /* AWSTestUtility.m */; };
 		C436FB0A2437EBE30004738F /* AWSPinpointNotificationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C436FB092437EBE30004738F /* AWSPinpointNotificationManagerTests.m */; };
 		C436FB16243FC5310004738F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB14243FC5310004738F /* UIColorExtensions.swift */; };
-		C436FB2024478ADC0004738F /* mock_getIAM_data.json in Resources */ = {isa = PBXBuildFile; fileRef = C436FB1F24478ADC0004738F /* mock_getIAM_data.json */; };
 		C436FB2324478B0F0004738F /* AWSPinpointSplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */; };
 		C436FB2424478B0F0004738F /* InAppMessagingModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB2224478B0E0004738F /* InAppMessagingModule.swift */; };
 		CE0D41701C6A66E5006B91B5 /* AWSCore.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0D416F1C6A66E5006B91B5 /* AWSCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3902,7 +3901,6 @@
 		B5DD456122CA6E01003871AE /* AWSConnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSConnectTests.swift; sourceTree = "<group>"; };
 		C436FB092437EBE30004738F /* AWSPinpointNotificationManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AWSPinpointNotificationManagerTests.m; sourceTree = "<group>"; };
 		C436FB14243FC5310004738F /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
-		C436FB1F24478ADC0004738F /* mock_getIAM_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mock_getIAM_data.json; sourceTree = "<group>"; };
 		C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPinpointSplashViewController.swift; sourceTree = "<group>"; };
 		C436FB2224478B0E0004738F /* InAppMessagingModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppMessagingModule.swift; sourceTree = "<group>"; };
 		CE0D416D1C6A66E5006B91B5 /* AWSCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWSCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6443,7 +6441,6 @@
 			children = (
 				C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */,
 				C436FB2224478B0E0004738F /* InAppMessagingModule.swift */,
-				C436FB1F24478ADC0004738F /* mock_getIAM_data.json */,
 				C436FB14243FC5310004738F /* UIColorExtensions.swift */,
 			);
 			path = InAppMessaging;
@@ -12057,7 +12054,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C436FB2024478ADC0004738F /* mock_getIAM_data.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
