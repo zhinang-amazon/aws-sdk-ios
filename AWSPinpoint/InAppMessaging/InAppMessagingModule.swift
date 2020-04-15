@@ -25,6 +25,21 @@ import UIKit
         super.init()
     }
     
+    public func retrieveEligibleInAppMessages() {
+        if let url = URL(string: "https://google.com/getIAM?endpointID=ABC") {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let modelDict = try JSONSerialization.jsonObject(with: data)
+                        self.displayIAM(data: modelDict as! [String : Any])
+                    } catch {
+                        print("invalid data from retrieveEligibleInAppMessages")
+                    }
+                }
+            }.resume()
+        }
+    }
+
     @objc public func displayIAM(data: [String: Any]) {
         if rootViewController == nil {
             rootViewController = UIApplication.shared.keyWindow?.rootViewController
@@ -41,10 +56,13 @@ import UIKit
             print("iOS version below 9.0")
             return
         }
-        let splashVC = AWSPinpointSplashViewController(model: splashModel,
-                                                       delegate: delegate)
-        rootVC.present(splashVC, animated: true, completion: {
-            print("splash IAM shown")
-        })
+        
+        DispatchQueue.main.async {
+            let splashVC = AWSPinpointSplashViewController(model: splashModel,
+                                                           delegate: self.delegate)
+            rootVC.present(splashVC, animated: true, completion: {
+                print("splash IAM shown")
+            })
+        }
     }
 }

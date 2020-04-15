@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public class AWSPinpointSplashModel: NSObject {
+@objc public class AWSPinpointSplashModel: NSObject, Codable {
     @objc public let id: String
     @objc public let name: String
     @objc public let campaignId: String
@@ -26,7 +26,7 @@ import Foundation
     @objc public let secondaryButtonHexColor: String? // default transparent
     //@objc public let secondaryButtonURL: URL? // default dismiss
     
-    @objc public let customParam: [String: Any]
+    @objc public let customParam: [String: String]
     
     init?(data: [String: Any]) {
         self.id = data["id"] as! String
@@ -48,7 +48,7 @@ import Foundation
         self.secondaryButtonHexColor = uiConfiguration["secondaryButtonHexColor"] as! String
         //self.secondaryButtonURL = URL(string: data["secondaryButtonURL"] as! String)
         
-        self.customParam = data["customParam"] as! [String: Any]
+        self.customParam = data["customParam"] as! [String: String]
     }
 }
 
