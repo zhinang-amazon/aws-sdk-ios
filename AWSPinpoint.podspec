@@ -14,5 +14,9 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.dependency 'AWSCore', '2.13.1'
   s.source_files = 'AWSPinpoint/*.{h,m,swift}', 'AWSPinpoint/**/*.{h,m,swift}'
+  s.resource_bundles = {
+    'AWSPinpoint' => ['AWSPinpoint/InAppMessaging/*.{json}']
+  }
+  s.resources = 'AWSPinpoint/InAppMessaging/*.{json}'
   s.private_header_files = 'AWSPinpoint/Internal/*.h'
 end

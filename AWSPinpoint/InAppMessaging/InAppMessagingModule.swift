@@ -18,6 +18,8 @@ import UIKit
     var enabled: Bool = true
     let delegate: InAppMessagingDelegate
     var rootViewController: UIViewController?
+    var queue: [AWSPinpointSplashModel] = []
+    var activeIAMShown = false
     
     @objc public init(delegate: InAppMessagingDelegate) {
         rootViewController = UIApplication.shared.keyWindow?.rootViewController
@@ -26,43 +28,71 @@ import UIKit
     }
     
     public func retrieveEligibleInAppMessages() {
-        if let url = URL(string: "https://google.com/getIAM?endpointID=ABC") {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let data = data {
-                    do {
-                        let modelDict = try JSONSerialization.jsonObject(with: data)
-                        self.displayIAM(data: modelDict as! [String : Any])
-                    } catch {
-                        print("invalid data from retrieveEligibleInAppMessages")
-                    }
-                }
-            }.resume()
+//        if let url = URL(string: "https://google.com/getIAM?endpointID=ABC") {
+//            URLSession.shared.dataTask(with: url) { data, response, error in
+//                if let data = data {
+//                    do {
+//                        let modelDict = try JSONSerialization.jsonObject(with: data)
+//                        self.displayIAM(data: modelDict as! [String : Any])
+//                    } catch {
+//                        print("invalid data from retrieveEligibleInAppMessages")
+//                    }
+//                }
+//            }.resume()
+//        }
+        
+        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data", ofType: "json")
+        {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let modelDict = try JSONSerialization.jsonObject(with: data)
+                self.displayIAM(data: modelDict as! [String : Any])
+            } catch {
+                print("invalid data from retrieveEligibleInAppMessages")
+            }
         }
     }
 
     @objc public func displayIAM(data: [String: Any]) {
-        if rootViewController == nil {
-            rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        }
-        guard let rootVC = rootViewController else {
-            print("IAM rootViewController not configured")
-            return
-        }
-        guard let splashModel = AWSPinpointSplashModel(data: data["splash"] as! [String : Any]) else {
-            print("invalid IAM data")
-            return
-        }
-        guard #available(iOS 9.0, *) else {
-            print("iOS version below 9.0")
-            return
-        }
-        
         DispatchQueue.main.async {
+            if self.rootViewController == nil {
+                self.rootViewController = UIApplication.shared.keyWindow?.rootViewController
+            }
+            guard let rootVC = self.rootViewController else {
+                print("IAM rootViewController not configured")
+                return
+            }
+            guard let splashModel = AWSPinpointSplashModel(data: data["splash"] as! [String : Any]) else {
+                print("invalid IAM data")
+                return
+            }
+            guard #available(iOS 9.0, *) else {
+                print("iOS version below 9.0")
+                return
+            }
             let splashVC = AWSPinpointSplashViewController(model: splashModel,
                                                            delegate: self.delegate)
-            rootVC.present(splashVC, animated: true, completion: {
+            self.topViewController()?.present(splashVC, animated: true, completion: {
                 print("splash IAM shown")
             })
         }
+    }
+    
+    private func topViewController() -> UIViewController? {
+        var top = self.rootViewController
+        while true {
+            if let presented = top?.presentedViewController {
+                top = presented
+            } else if let nav = top as? UINavigationController {
+                top = nav.visibleViewController
+            } else if let tab = top as? UITabBarController {
+                top = tab.selectedViewController
+            } else if let split = top as? UISplitViewController {
+                top = split.viewControllers[0]
+            } else {
+                break
+            }
+        }
+        return top
     }
 }

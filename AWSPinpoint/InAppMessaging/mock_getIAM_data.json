@@ -1,0 +1,23 @@
+{
+  "splash": {
+  	"id": "12345678",
+  	"name": "testSplashIAM",
+  	"campaignId": "1234567890abcdef",
+  	"uiConfiguration": {
+  		"title": "Message Title",
+  		"message": "This is a test message that is sent from push.",
+  		"backgroundHexColor": "#f0e8eb",
+  		"backgroundImageURL": "https://dummyimage.com/600x3:5/0099ff&text=dummyimage_600x1000",
+  		"primaryButtonText": "primaryButton Google",
+  		"primaryButtonTextColor": "#FFFFFF",
+  		"primaryButtonHexColor": "#F3A721",
+  		"secondaryButtonText": "secondaryButton Amazon",
+  		"secondaryButtonTextColor": "#000000",
+  		"secondaryButtonHexColor": "#FFFFFF"
+  	},
+  	"customParam": {
+  		"primaryButtonURL": "https://www.google.com",
+  		"secondaryButtonURL": "https://www.amazon.com"
+  	}
+  }
+}
