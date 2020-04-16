@@ -1,11 +1,11 @@
 {
   "splash": {
   	"id": "12345678",
-  	"name": "testSplashIAM",
+  	"name": "localSplashIAM",
   	"campaignId": "1234567890abcdef",
   	"uiConfiguration": {
-  		"title": "Splash Message",
-  		"message": "This is a test splash message that is fetched from server",
+  		"title": "Local Splash Message",
+  		"message": "This is a test splash message that is generated locally",
   		"backgroundHexColor": "#f0e8eb",
   		"backgroundImageURL": "https://dummyimage.com/600x3:5/green&text=dummyimage_600x1000",
   		"primaryButtonText": "Primary Button",

@@ -27,33 +27,33 @@ import UIKit
         super.init()
     }
     
-    public func retrieveEligibleInAppMessages() {
-//        if let url = URL(string: "https://google.com/getIAM?endpointID=ABC") {
-//            URLSession.shared.dataTask(with: url) { data, response, error in
-//                if let data = data {
-//                    do {
-//                        let modelDict = try JSONSerialization.jsonObject(with: data)
-//                        self.displayIAM(data: modelDict as! [String : Any])
-//                    } catch {
-//                        print("invalid data from retrieveEligibleInAppMessages")
-//                    }
-//                }
-//            }.resume()
+//    public func retrieveEligibleInAppMessages() {
+////        if let url = URL(string: "https://google.com/getIAM?endpointID=ABC") {
+////            URLSession.shared.dataTask(with: url) { data, response, error in
+////                if let data = data {
+////                    do {
+////                        let modelDict = try JSONSerialization.jsonObject(with: data)
+////                        self.displayIAM(data: modelDict as! [String : Any])
+////                    } catch {
+////                        print("invalid data from retrieveEligibleInAppMessages")
+////                    }
+////                }
+////            }.resume()
+////        }
+//        
+//        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data", ofType: "json")
+//        {
+//            do {
+//                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+//                let modelDict = try JSONSerialization.jsonObject(with: data)
+//                self.displayIAM(data: modelDict as! [String : Any])
+//            } catch {
+//                print("invalid data from retrieveEligibleInAppMessages")
+//            }
 //        }
-        
-        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data", ofType: "json")
-        {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                let modelDict = try JSONSerialization.jsonObject(with: data)
-                self.displayIAM(data: modelDict as! [String : Any])
-            } catch {
-                print("invalid data from retrieveEligibleInAppMessages")
-            }
-        }
-    }
+//    }
 
-    public func retrieveSplashIAM() {
+    public func localSplashIAM() {
         if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data_splash", ofType: "json")
         {
             do {
@@ -65,8 +65,8 @@ import UIKit
             }
         }
     }
-    
-    public func retrieveDialogIAM() {
+
+    public func localDialogIAM() {
         if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data_dialog", ofType: "json")
         {
             do {

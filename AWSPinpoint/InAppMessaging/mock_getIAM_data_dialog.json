@@ -1,11 +1,11 @@
 {
   "dialog": {
   	"id": "87654321",
-  	"name": "testDialogIAM",
+  	"name": "localDialogIAM",
   	"campaignId": "1234567890abcdef",
   	"uiConfiguration": {
-  		"title": "Dialog Message",
-  		"message": "This is a test dialog message that is fetched from server",
+  		"title": "Local Dialog Message",
+  		"message": "This is a test dialog message that is generated locally",
   		"backgroundHexColor": "#f0e8eb",
   		"backgroundImageURL": "https://dummyimage.com/600x1:1/0099ff&text=dummyimage_600x600",
   		"primaryButtonText": "Primary Button",
