@@ -19,7 +19,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class AWSPinpointConfiguration, AWSPinpointTargetingClient, AWSPinpointAnalyticsClient, AWSPinpointNotificationManager, AWSPinpointSessionClient;
+@class AWSPinpointConfiguration, AWSPinpointTargetingClient, AWSPinpointAnalyticsClient, AWSPinpointNotificationManager, AWSPinpointSessionClient, InAppMessagingModule;
 
 /**
  Amazon Pinpoint
@@ -60,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
  @returns the `AWSPinpointConfiguration`.
  */
 @property (nonatomic, readonly) AWSPinpointConfiguration * configuration;
+
+@property (nonatomic, strong) InAppMessagingModule * inAppMessagingModule;
 
 /**
  Creates an `AWSPinpoint` instance with the specified `configuration` if the instance does not already exists for the configurations' `appId`. If an instance exists for the given `appId`, returns the existing instance. `configuration` are ignored if an instance exists for the given `appId`. The strong reference to the instance is maintained by `AWSPinpoint`, and the developer does not need to retain it manually.

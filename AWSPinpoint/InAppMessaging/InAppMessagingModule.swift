@@ -20,6 +20,7 @@ import UIKit
     var rootViewController: UIViewController?
     var queue: [AWSPinpointIAMModel] = []
     var activeIAMShown = false
+    var savedAppStartData: [String: Any]? = nil
     
     @objc public init(delegate: InAppMessagingDelegate) {
         rootViewController = UIApplication.shared.keyWindow?.rootViewController
@@ -78,6 +79,10 @@ import UIKit
             }
         }
     }
+    
+    @objc public func saveAppStartIAM(data: [String: Any]) {
+        self.savedAppStartData = data
+    }
 
     @objc public func displayIAM(data: [String: Any]) {
         DispatchQueue.main.async {
@@ -107,6 +112,16 @@ import UIKit
                     print("dialog IAM shown")
                 })
             }
+        }
+    }
+    
+    public func displayAppStartIAMIfAvailable() {
+        DispatchQueue.main.async {
+            guard let savedAppStartData = self.savedAppStartData else {
+                return
+            }
+            self.displayIAM(data: savedAppStartData)
+            self.savedAppStartData = nil
         }
     }
     

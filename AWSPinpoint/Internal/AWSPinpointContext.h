@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import <AWSCore/AWSCore.h>
 
-@class AWSPinpointContext, AWSPinpointConfiguration, AWSPinpointAnalytics, AWSPinpointTargeting, AWSPinpointTargetingClient, AWSPinpointAnalyticsClient, AWSPinpointSessionClient;
+@class AWSPinpointContext, AWSPinpointConfiguration, AWSPinpointAnalytics, AWSPinpointTargeting, AWSPinpointTargetingClient, AWSPinpointAnalyticsClient, AWSPinpointSessionClient, InAppMessagingModule;
 
 @interface AWSPinpointClientContext : AWSClientContext
 @end
@@ -33,5 +33,6 @@
 @property (nonatomic, strong) AWSPinpointTargetingClient *targetingClient;
 @property (nonatomic, strong) AWSPinpointAnalyticsClient *analyticsClient;
 @property (nonatomic, strong) AWSPinpointSessionClient *sessionClient;
+@property (nonatomic, strong) InAppMessagingModule * inAppMessagingModule;
 
 @end

@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class AWSPinpoint;
+@class AWSPinpoint, InAppMessagingModule;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,6 +40,8 @@ typedef NS_ENUM(NSInteger, AWSPinpointPushEventSourceType) {
     AWSPinpointPushEventSourceTypeJourney,
     AWSPinpointPushEventSourceTypeUnknown
 };
+
+@property (nonatomic, strong) InAppMessagingModule *inAppMessagingModule;
 
 #pragma mark - Notification Helpers
 /**

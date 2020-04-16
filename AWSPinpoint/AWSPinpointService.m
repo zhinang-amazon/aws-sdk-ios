@@ -25,6 +25,7 @@
 #import "AWSPinpointAnalyticsClient.h"
 #import "AWSPinpointTargetingClient.h"
 #import <AWSCore/AWSSynchronizedMutableDictionary.h>
+#import "AWSPinpoint/AWSPinpoint-Swift.h"
 
 #pragma mark - Categories -
 
@@ -143,6 +144,7 @@ static AWSSynchronizedMutableDictionary *_pinpointForAppNamespace = nil;
         } else {
             AWSDDLogWarn(@"Pinpoint Analytics Event recording is disabled.");
         }
+        _pinpointContext.inAppMessagingModule = _inAppMessagingModule;
         
         _notificationManager = [[AWSPinpointNotificationManager alloc] initWithContext:_pinpointContext];
         [_notificationManager interceptDidFinishLaunchingWithOptions:configuration.launchOptions];

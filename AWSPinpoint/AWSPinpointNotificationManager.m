@@ -39,7 +39,6 @@ NSString *const AWSPinpointJourneyKey = @"journey";
 @interface AWSPinpointNotificationManager()
 @property (nonatomic, strong) AWSPinpointContext *context;
 @property (nonatomic) AWSPinpointPushEventSourceType previousEventSourceType;
-@property (nonatomic, strong) InAppMessagingModule *inAppMessagingModule;
 @end
 
 @interface AWSPinpointAnalyticsClient()
@@ -63,7 +62,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
     if (self = [super init]) {
         _context = context;
         _previousEventSourceType = AWSPinpointPushEventSourceTypeUnknown;
-        _inAppMessagingModule = [[InAppMessagingModule alloc] initWithDelegate: self];
+        //_inAppMessagingModule = [[InAppMessagingModule alloc] initWithDelegate: self];
     }
     return self;
 }
@@ -157,16 +156,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
     
     NSDictionary *inAppMessagingData = userInfo[AWSDataKey][AWSPinpointKey][@"inAppMessaging"];
     if ([inAppMessagingData isKindOfClass:[NSDictionary class]]) {
-//        AWSPinpointSplashViewController *splashViewController = [[AWSPinpointSplashViewController alloc] initWithData:inAppMessagingData[@"splash"]];
-        //UIViewController *vc = [UIViewController new];
-        //[vc.view addSubview:splashView];
-//        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:splashViewController animated:YES completion:^(void){}];
-//        [self.rootViewController presentViewController:splashViewController
-//                                              animated:YES
-//                                            completion:^(void){}];
-        
         [self.inAppMessagingModule displayIAMWithData:inAppMessagingData];
-        
     }
 }
 
@@ -194,6 +184,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
             [self addGlobalEventSourceMetadata:metadata withEventSourceType:eventSourceType];
             [self recordMessageReceivedEventForNotification:userInfo
                                          withPushActionType:pushActionType];
+            [self saveAppStartInAppMessaege:userInfo];
             break;
         }
         case AWSPinpointPushActionTypeReceivedForeground: {
@@ -411,6 +402,13 @@ NSString *const AWSPinpointJourneyKey = @"journey";
 
 - (void)messageDismissedWithMessage: (AWSPinpointIAMModel*) message {
     AWSDDLogVerbose(@"Message dismissed: %@", message.title);
+}
+
+- (void)saveAppStartInAppMessaege: (NSDictionary*) userInfo {
+    NSDictionary *inAppMessagingData = userInfo[AWSDataKey][AWSPinpointKey][@"inAppMessaging"];
+    if ([inAppMessagingData isKindOfClass:[NSDictionary class]]) {
+        [self.inAppMessagingModule saveAppStartIAMWithData:inAppMessagingData];
+    }
 }
 
 @end
