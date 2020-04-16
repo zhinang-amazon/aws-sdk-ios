@@ -194,9 +194,6 @@ NSString *const AWSPinpointJourneyKey = @"journey";
             [self addGlobalEventSourceMetadata:metadata withEventSourceType:eventSourceType];
             [self recordMessageReceivedEventForNotification:userInfo
                                          withPushActionType:pushActionType];
-            if (shouldHandleNotificationDeepLink) {
-                [self handleNotificationDeepLinkForNotification:userInfo];
-            }
             break;
         }
         case AWSPinpointPushActionTypeReceivedForeground: {
