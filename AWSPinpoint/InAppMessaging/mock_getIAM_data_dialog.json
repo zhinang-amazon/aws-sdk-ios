@@ -1,7 +1,7 @@
 {
   "dialog": {
   	"id": "87654321",
-  	"name": "localDialogIAM",
+    "name": "local.DialogIAM",
   	"campaignId": "1234567890abcdef",
   	"uiConfiguration": {
   		"title": "Local Dialog Message",

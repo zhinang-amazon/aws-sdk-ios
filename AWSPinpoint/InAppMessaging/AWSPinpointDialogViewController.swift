@@ -17,6 +17,7 @@ public class AWSPinpointDialogViewController: UIViewController {
     private let secondaryButton = UIButton()
     private var backgroundImage = UIImageView()
     private let contentStackView = UIStackView()
+    private let buttonStackView = UIStackView()
     private let contentBackgroundView = UIView()
     private var userDismissed = true
     
@@ -28,6 +29,7 @@ public class AWSPinpointDialogViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImage.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         titleLabel.text = model.title
@@ -43,6 +45,7 @@ public class AWSPinpointDialogViewController: UIViewController {
         }
         
         primaryButton.setTitle(model.primaryButtonText, for: .normal)
+        primaryButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
         primaryButton.layer.cornerRadius = 3
         primaryButton.clipsToBounds = true
         if let primaryButtonTextColor = model.primaryButtonTextColor {
@@ -54,6 +57,7 @@ public class AWSPinpointDialogViewController: UIViewController {
         primaryButton.addTarget(self, action: #selector(primaryButtonPressed), for: .touchUpInside)
         
         secondaryButton.setTitle(model.secondaryButtonText, for: .normal)
+        secondaryButton.titleLabel?.font = .systemFont(ofSize: 15)
         secondaryButton.layer.cornerRadius = 3
         secondaryButton.clipsToBounds = true
         if let secondaryButtonTextColor = model.secondaryButtonTextColor {
@@ -67,6 +71,12 @@ public class AWSPinpointDialogViewController: UIViewController {
         contentStackView.axis = .vertical
         contentStackView.alignment = .center
         contentStackView.spacing = 2
+        contentStackView.isLayoutMarginsRelativeArrangement = true
+        contentStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        
+        buttonStackView.axis = .horizontal
+        buttonStackView.alignment = .center
+        buttonStackView.spacing = 2
         
         contentBackgroundView.backgroundColor = .white
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap(_:)))
@@ -82,11 +92,13 @@ public class AWSPinpointDialogViewController: UIViewController {
         view.addSubview(contentBackgroundView)
         view.addSubview(contentStackView)
         
+        buttonStackView.addArrangedSubview(secondaryButton)
+        buttonStackView.addArrangedSubview(primaryButton)
+        
         contentStackView.addArrangedSubview(backgroundImage)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(messageLabel)
-        contentStackView.addArrangedSubview(primaryButton)
-        contentStackView.addArrangedSubview(secondaryButton)
+        contentStackView.addArrangedSubview(buttonStackView)
         let constraints = [
             contentStackView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.8),
             contentStackView.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8),
@@ -99,6 +111,7 @@ public class AWSPinpointDialogViewController: UIViewController {
             contentBackgroundView.rightAnchor.constraint(equalTo: contentStackView.rightAnchor),
             
             backgroundImage.heightAnchor.constraint(equalToConstant: 300),
+            backgroundImage.widthAnchor.constraint(equalToConstant: 300),
             backgroundImage.leftAnchor.constraint(equalTo: contentStackView.leftAnchor),
             backgroundImage.rightAnchor.constraint(equalTo: contentStackView.rightAnchor),
             
@@ -110,14 +123,20 @@ public class AWSPinpointDialogViewController: UIViewController {
             messageLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             messageLabel.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
             
-            primaryButton.heightAnchor.constraint(equalToConstant: 40),
-            primaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
-            primaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
+            buttonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+            buttonStackView.heightAnchor.constraint(equalToConstant: 40),
+            buttonStackView.leftAnchor.constraint(equalTo: contentStackView.leftAnchor, constant: 10),
+            buttonStackView.rightAnchor.constraint(equalTo: contentStackView.rightAnchor, constant: -10),
             
-            secondaryButton.heightAnchor.constraint(equalToConstant: 40),
-            secondaryButton.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
-            secondaryButton.rightAnchor.constraint(equalTo: titleLabel.rightAnchor)
+            primaryButton.widthAnchor.constraint(equalToConstant: 120),
+            primaryButton.topAnchor.constraint(equalTo: buttonStackView.topAnchor),
+            primaryButton.bottomAnchor.constraint(equalTo: buttonStackView.bottomAnchor),
+            
+            secondaryButton.widthAnchor.constraint(equalTo: primaryButton.widthAnchor),
+            secondaryButton.topAnchor.constraint(equalTo: buttonStackView.topAnchor),
+            secondaryButton.bottomAnchor.constraint(equalTo: buttonStackView.bottomAnchor)
         ]
+        buttonStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         NSLayoutConstraint.activate(constraints)
     }

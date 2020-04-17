@@ -12,11 +12,12 @@ import UIKit
     @objc func secondaryButtonClicked(message: AWSPinpointIAMModel)
     //@objc func messageClicked(message: AWSPinpointSplashModel)
     @objc func messageDismissed(message: AWSPinpointIAMModel)
+    @objc optional func displayInvoked(message: AWSPinpointIAMModel)
 }
 
 @objc public class InAppMessagingModule: NSObject {
     var enabled: Bool = true
-    let delegate: InAppMessagingDelegate
+    public var delegate: InAppMessagingDelegate
     var rootViewController: UIViewController?
     var queue: [AWSPinpointIAMModel] = []
     var activeIAMShown = false
@@ -89,7 +90,7 @@ import UIKit
             if self.rootViewController == nil {
                 self.rootViewController = UIApplication.shared.keyWindow?.rootViewController
             }
-            guard let rootVC = self.rootViewController else {
+            guard let _ = self.rootViewController else {
                 print("IAM rootViewController not configured")
                 return
             }
@@ -97,8 +98,16 @@ import UIKit
                 print("iOS version below 9.0")
                 return
             }
+            let topVC = self.topViewController()
+            if let _ = topVC as? AWSPinpointSplashViewController {
+                return
+            }
+            if let _ = topVC as? AWSPinpointDialogViewController {
+                return
+            }
             if let splashData = data["splash"] as? [String: Any] {
                 let model = AWSPinpointIAMModel(data: splashData)!
+                self.delegate.displayInvoked?(message: model)
                 let iamVC = AWSPinpointSplashViewController(model: model,
                                                         delegate: self.delegate)
                 self.topViewController()?.present(iamVC, animated: true, completion: {
@@ -106,6 +115,7 @@ import UIKit
                 })
             } else if let dialogData = data["dialog"] as? [String: Any] {
                 let model = AWSPinpointIAMModel(data: dialogData)!
+                self.delegate.displayInvoked?(message: model)
                 let iamVC = AWSPinpointDialogViewController(model: model,
                                                         delegate: self.delegate)
                 self.topViewController()?.present(iamVC, animated: true, completion: {

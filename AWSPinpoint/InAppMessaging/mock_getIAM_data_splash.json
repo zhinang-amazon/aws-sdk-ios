@@ -1,7 +1,7 @@
 {
   "splash": {
   	"id": "12345678",
-  	"name": "localSplashIAM",
+    "name": "local.SplashIAM",
   	"campaignId": "1234567890abcdef",
   	"uiConfiguration": {
   		"title": "Local Splash Message",
