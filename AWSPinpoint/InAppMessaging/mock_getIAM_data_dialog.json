@@ -3,6 +3,7 @@
   	"id": "87654321",
     "name": "local.DialogIAM",
   	"campaignId": "1234567890abcdef",
+    "priority": 50,
   	"uiConfiguration": {
   		"title": "Local Dialog Message",
   		"message": "This is a test dialog message that is generated locally",

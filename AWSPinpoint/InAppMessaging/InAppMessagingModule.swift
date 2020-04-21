@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum InAppMessagingStyle {
+    case splash
+    case dialog
+}
+
 @objc public protocol InAppMessagingDelegate {
     @objc func primaryButtonClicked(message: AWSPinpointIAMModel)
     @objc func secondaryButtonClicked(message: AWSPinpointIAMModel)
@@ -99,28 +104,37 @@ import UIKit
                 return
             }
             let topVC = self.topViewController()
-            if let _ = topVC as? AWSPinpointSplashViewController {
-                return
+            var previousMessage: AWSPinpointIAMModel?
+            if let topSplashVC = topVC as? AWSPinpointSplashViewController {
+                previousMessage = topSplashVC.model
             }
-            if let _ = topVC as? AWSPinpointDialogViewController {
-                return
+            if let topDialogVC = topVC as? AWSPinpointDialogViewController {
+                previousMessage = topDialogVC.model
             }
             if let splashData = data["splash"] as? [String: Any] {
                 let model = AWSPinpointIAMModel(data: splashData)!
-                self.delegate.displayInvoked?(message: model)
-                let iamVC = AWSPinpointSplashViewController(model: model,
-                                                        delegate: self.delegate)
-                self.topViewController()?.present(iamVC, animated: true, completion: {
-                    print("splash IAM shown")
-                })
+                if let previousMessage = previousMessage {
+                    if previousMessage.priority <= model.priority {
+                        topVC?.dismiss(animated: true, completion: {
+                            self.displayMessage(model, style: .splash)
+                        })
+                    }
+                    // new message priority is low, no op
+                    return
+                }
+                self.displayMessage(model, style: .splash)
             } else if let dialogData = data["dialog"] as? [String: Any] {
                 let model = AWSPinpointIAMModel(data: dialogData)!
-                self.delegate.displayInvoked?(message: model)
-                let iamVC = AWSPinpointDialogViewController(model: model,
-                                                        delegate: self.delegate)
-                self.topViewController()?.present(iamVC, animated: true, completion: {
-                    print("dialog IAM shown")
-                })
+                if let previousMessage = previousMessage {
+                    if previousMessage.priority <= model.priority {
+                        topVC?.dismiss(animated: true, completion: {
+                            self.displayMessage(model, style: .dialog)
+                        })
+                    }
+                    // new message priority is low, no op
+                    return
+                }
+                self.displayMessage(model, style: .dialog)
             }
         }
     }
@@ -133,6 +147,24 @@ import UIKit
             self.displayIAM(data: savedAppStartData)
             self.savedAppStartData = nil
         }
+    }
+    
+    @available(iOS 9.0, *)
+    private func displayMessage(_ message: AWSPinpointIAMModel, style: InAppMessagingStyle) {
+        self.delegate.displayInvoked?(message: message)
+        let iamVC: UIViewController
+        switch style {
+            case .splash:
+                iamVC = AWSPinpointSplashViewController(model: message,
+                                                        delegate: self.delegate)
+            case .dialog:
+                iamVC = AWSPinpointDialogViewController(model: message,
+                                                        delegate: self.delegate)
+        }
+        
+        self.topViewController()?.present(iamVC, animated: true, completion: {
+            print("\(message.name) IAM shown")
+        })
     }
     
     private func topViewController() -> UIViewController? {

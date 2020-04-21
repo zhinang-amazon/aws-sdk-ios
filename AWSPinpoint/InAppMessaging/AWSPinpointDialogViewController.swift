@@ -9,7 +9,7 @@ import UIKit
 
 @available(iOS 9.0, *)
 public class AWSPinpointDialogViewController: UIViewController {
-    private let model: AWSPinpointIAMModel
+    public let model: AWSPinpointIAMModel
     private let delegate: InAppMessagingDelegate
     private let titleLabel = UILabel()
     private let messageLabel = UILabel()

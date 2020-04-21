@@ -25,6 +25,7 @@ import Foundation
     @objc public let secondaryButtonTextColor: String? // system default
     @objc public let secondaryButtonHexColor: String? // default transparent
     //@objc public let secondaryButtonURL: URL? // default dismiss
+    @objc public let priority: Int
     
     @objc public let customParam: [String: String]
     
@@ -41,20 +42,19 @@ import Foundation
         self.primaryButtonText = uiConfiguration["primaryButtonText"] as! String
         self.primaryButtonTextColor = uiConfiguration["primaryButtonTextColor"] as! String
         self.primaryButtonHexColor = uiConfiguration["primaryButtonHexColor"] as! String
-        //self.primaryButtonURL = URL(string: data["primaryButtonURL"] as! String)!
 
         self.secondaryButtonText = uiConfiguration["secondaryButtonText"] as! String
         self.secondaryButtonTextColor = uiConfiguration["secondaryButtonTextColor"] as! String
         self.secondaryButtonHexColor = uiConfiguration["secondaryButtonHexColor"] as! String
-        //self.secondaryButtonURL = URL(string: data["secondaryButtonURL"] as! String)
-        
+
+        self.priority = data["priority"] as? Int ?? 50
         self.customParam = data["customParam"] as! [String: String]
     }
 }
 
 @available(iOS 9.0, *)
 public class AWSPinpointSplashViewController: UIViewController {
-    private let model: AWSPinpointIAMModel
+    public let model: AWSPinpointIAMModel
     private let delegate: InAppMessagingDelegate
     private let titleLabel = UILabel()
     private let messageLabel = UILabel()
@@ -65,12 +65,9 @@ public class AWSPinpointSplashViewController: UIViewController {
     private var userDismissed = true
     
     @objc public init(model: AWSPinpointIAMModel, delegate: InAppMessagingDelegate) {
-        //if let m = AWSPinpointSplashModel(data: data) {
         self.model = model
         self.delegate = delegate
-//        } else {
-//            return nil
-//        }
+
         super.init(nibName: nil, bundle: nil)
         view.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -128,13 +125,10 @@ public class AWSPinpointSplashViewController: UIViewController {
         contentStackView.addArrangedSubview(secondaryButton)
         let windowFrame = UIApplication.shared.keyWindow!.frame
         let constraints = [
-            //view.widthAnchor.constraint(equalToConstant: 400),
-            //view.heightAnchor.constraint(equalToConstant: 600),
             backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor),
             backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor),
-            //contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:-20),
             contentStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant:20),
             contentStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant:-20),
@@ -154,21 +148,6 @@ public class AWSPinpointSplashViewController: UIViewController {
         contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         NSLayoutConstraint.activate(constraints)
     }
-    
-//    public override func willMove(toSuperview newSuperview: UIView?) {
-//        let constraints = [
-//            topAnchor.constraint(equalTo: newSuperview!.topAnchor),
-//            bottomAnchor.constraint(equalTo: newSuperview!.bottomAnchor),
-//            leftAnchor.constraint(equalTo: newSuperview!.leftAnchor),
-//            rightAnchor.constraint(equalTo: newSuperview!.rightAnchor)
-//        ]
-//        NSLayoutConstraint.activate(constraints)
-//    }
-    
-//    public override func viewWillLayoutSubviews() {
-//        view.updateConstraints()
-//        super.viewWillLayoutSubviews()
-//    }
     
     @objc func primaryButtonPressed() {
         userDismissed = false
