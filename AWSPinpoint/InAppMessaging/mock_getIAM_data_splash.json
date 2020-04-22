@@ -5,20 +5,19 @@
   	"campaignId": "1234567890abcdef",
     "priority": 50,
   	"uiConfiguration": {
-  		"title": "Local Splash Message",
-  		"message": "This is a test splash message that is generated locally",
-  		"backgroundHexColor": "#f0e8eb",
-  		"backgroundImageURL": "https://dummyimage.com/600x3:5/green&text=dummyimage_600x1000",
-  		"primaryButtonText": "Primary Button",
+  		"title": "Try Amazon Prime",
+  		"message": "Free two-day delivery, Prime Video, Prime Music, Twitch Prime and so much more.",
+  		"backgroundHexColor": "#002D44",
+  		"backgroundImageURL": "https://drive.google.com/uc?export=download&id=1l8vfDRFuwxaRshSBgWtJl4lueSF5c3Wq",
+  		"primaryButtonText": "Learn More",
   		"primaryButtonTextColor": "#FFFFFF",
   		"primaryButtonHexColor": "#F3A721",
-  		"secondaryButtonText": "Secondary Button",
-  		"secondaryButtonTextColor": "#000000",
-  		"secondaryButtonHexColor": "#FFFFFF"
+  		"secondaryButtonText": "Not interested",
+  		"secondaryButtonTextColor": "#FFFFFF",
+  		"secondaryButtonHexColor": "#002D44"
   	},
   	"customParam": {
-  		"primaryButtonURL": "https://www.google.com",
-  		"secondaryButtonURL": "https://www.amazon.com"
+  		"primaryButtonURL": "https://www.amazon.com/amazonprime"
   	}
   }
 }

@@ -32,6 +32,10 @@ public class AWSPinpointDialogViewController: UIViewController {
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImage.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        contentBackgroundView.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
+        titleLabel.backgroundColor = .clear
+        messageLabel.backgroundColor = .clear
+        buttonStackView.backgroundColor = .clear
         titleLabel.text = model.title
         titleLabel.font = .boldSystemFont(ofSize: 20)
         messageLabel.text = model.message
@@ -40,9 +44,6 @@ public class AWSPinpointDialogViewController: UIViewController {
         
         backgroundImage.contentMode = UIView.ContentMode.scaleAspectFit
         backgroundImage.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
-        if let imageURL = model.backgroundImageURL {
-            backgroundImage.downloaded(from: imageURL)
-        }
         
         primaryButton.setTitle(model.primaryButtonText, for: .normal)
         primaryButton.titleLabel?.font = .boldSystemFont(ofSize: 15)
@@ -78,7 +79,6 @@ public class AWSPinpointDialogViewController: UIViewController {
         buttonStackView.alignment = .center
         buttonStackView.spacing = 2
         
-        contentBackgroundView.backgroundColor = .white
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTap(_:)))
         view.addGestureRecognizer(tap)
         setConstraints()
@@ -139,6 +139,14 @@ public class AWSPinpointDialogViewController: UIViewController {
         buttonStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         NSLayoutConstraint.activate(constraints)
+    }
+    
+    func fetchImage(completion: @escaping (Bool) -> ()) {
+        if let imageURL = model.backgroundImageURL {
+            backgroundImage.download(from: imageURL) { success in
+                completion(success)
+            }
+        }
     }
     
     @objc func primaryButtonPressed() {

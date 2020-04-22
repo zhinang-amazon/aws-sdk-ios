@@ -10,6 +10,7 @@ import UIKit
 enum InAppMessagingStyle {
     case splash
     case dialog
+    case banner
 }
 
 @objc public protocol InAppMessagingDelegate {
@@ -23,15 +24,21 @@ enum InAppMessagingStyle {
 @objc public class InAppMessagingModule: NSObject {
     var enabled: Bool = true
     public var delegate: InAppMessagingDelegate
-    var rootViewController: UIViewController?
     var queue: [AWSPinpointIAMModel] = []
     var activeIAMShown = false
     var savedAppStartData: [String: Any]? = nil
+    let toastManager = ToastManager.shared
+    
+    var rootViewController: UIViewController? {
+        get {
+            return UIApplication.shared.keyWindow?.rootViewController
+        }
+    }
     
     @objc public init(delegate: InAppMessagingDelegate) {
-        rootViewController = UIApplication.shared.keyWindow?.rootViewController
         self.delegate = delegate
         super.init()
+        toastManager.isQueueEnabled = true
     }
     
 //    public func retrieveEligibleInAppMessages() {
@@ -89,12 +96,13 @@ enum InAppMessagingStyle {
     @objc public func saveAppStartIAM(data: [String: Any]) {
         self.savedAppStartData = data
     }
+    
+    @objc public func clearAppStartIAM() {
+        self.savedAppStartData = nil
+    }
 
     @objc public func displayIAM(data: [String: Any]) {
         DispatchQueue.main.async {
-            if self.rootViewController == nil {
-                self.rootViewController = UIApplication.shared.keyWindow?.rootViewController
-            }
             guard let _ = self.rootViewController else {
                 print("IAM rootViewController not configured")
                 return
@@ -135,6 +143,9 @@ enum InAppMessagingStyle {
                     return
                 }
                 self.displayMessage(model, style: .dialog)
+            } else if let bannerData = data["banner"] as? [String: Any] {
+                let model = AWSPinpointIAMModel(data: bannerData)!
+                self.displayMessage(model, style: .banner)
             }
         }
     }
@@ -149,22 +160,53 @@ enum InAppMessagingStyle {
         }
     }
     
+    public func displayToast(_ message: String, duration: Double, position: ToastPosition, completion: @escaping (Bool) -> Void) {
+        DispatchQueue.main.async {
+            self.topViewController()?.view.makeToast(message,
+                                                     duration: duration,
+                                                     position: position,
+                                                     completion: completion)
+        }
+    }
+    
     @available(iOS 9.0, *)
     private func displayMessage(_ message: AWSPinpointIAMModel, style: InAppMessagingStyle) {
         self.delegate.displayInvoked?(message: message)
-        let iamVC: UIViewController
         switch style {
             case .splash:
-                iamVC = AWSPinpointSplashViewController(model: message,
-                                                        delegate: self.delegate)
+                let iamVC = AWSPinpointSplashViewController(model: message,
+                                                            delegate: self.delegate)
+                iamVC.fetchImage(completion: { success in
+                    if success {
+                        self.topViewController()?.present(iamVC, animated: true, completion: {
+                            print("\(message.name) IAM shown")
+                        })
+                    } else {
+                        print("image fetching failed")
+                    }
+                })
+                break
             case .dialog:
-                iamVC = AWSPinpointDialogViewController(model: message,
-                                                        delegate: self.delegate)
+                let iamVC = AWSPinpointDialogViewController(model: message,
+                                                            delegate: self.delegate)
+                iamVC.fetchImage(completion: { success in
+                    if success {
+                        self.topViewController()?.present(iamVC, animated: true, completion: {
+                            print("\(message.name) IAM shown")
+                        })
+                    } else {
+                        print("image fetching failed")
+                    }
+                })
+                break
+            case .banner:
+                self.topViewController()?.view.makeToast(message.message, duration: 5.0, position: .top, title: message.title, completion: { didTap in
+                    if didTap {
+                        self.delegate.primaryButtonClicked(message: message)
+                    }
+                })
+                break
         }
-        
-        self.topViewController()?.present(iamVC, animated: true, completion: {
-            print("\(message.name) IAM shown")
-        })
     }
     
     private func topViewController() -> UIViewController? {

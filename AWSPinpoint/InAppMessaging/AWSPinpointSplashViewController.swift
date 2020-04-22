@@ -73,16 +73,16 @@ public class AWSPinpointSplashViewController: UIViewController {
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         backgroundImage.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.from(hex: model.backgroundHexColor)
+        contentStackView.backgroundColor = .clear
         titleLabel.text = model.title
-        titleLabel.font = .boldSystemFont(ofSize: 20)
+        titleLabel.font = .boldSystemFont(ofSize: 22)
+        titleLabel.textColor = .white
         messageLabel.text = model.message
-        messageLabel.font = .systemFont(ofSize: 14)
+        messageLabel.font = .systemFont(ofSize: 18)
+        messageLabel.textColor = .white
         messageLabel.numberOfLines = 0
         
-        backgroundImage.contentMode = UIView.ContentMode.scaleAspectFit
-        if let imageURL = model.backgroundImageURL {
-            backgroundImage.downloaded(from: imageURL)
-        }
+        backgroundImage.contentMode = UIView.ContentMode.scaleToFill
         
         primaryButton.setTitle(model.primaryButtonText, for: .normal)
         primaryButton.layer.cornerRadius = 3
@@ -114,6 +114,14 @@ public class AWSPinpointSplashViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func fetchImage(completion: @escaping (Bool) -> ()) {
+        if let imageURL = model.backgroundImageURL {
+            backgroundImage.download(from: imageURL) { success in
+                completion(success)
+            }
+        }
     }
     
     private func setConstraints() {

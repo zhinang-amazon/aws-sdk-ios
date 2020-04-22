@@ -156,6 +156,7 @@ NSString *const AWSPinpointJourneyKey = @"journey";
     
     NSDictionary *inAppMessagingData = userInfo[AWSDataKey][AWSPinpointKey][@"inAppMessaging"];
     if ([inAppMessagingData isKindOfClass:[NSDictionary class]]) {
+        [self.inAppMessagingModule clearAppStartIAM];
         [self.inAppMessagingModule displayIAMWithData:inAppMessagingData];
     }
 }

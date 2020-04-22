@@ -526,6 +526,8 @@
 		C436FB16243FC5310004738F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB14243FC5310004738F /* UIColorExtensions.swift */; };
 		C436FB2324478B0F0004738F /* AWSPinpointSplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */; };
 		C436FB2424478B0F0004738F /* InAppMessagingModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB2224478B0E0004738F /* InAppMessagingModule.swift */; };
+		C436FB28244FBBC70004738F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB27244FBBC60004738F /* Toast.swift */; };
+		C436FB2A244FBBE40004738F /* AWSPinpointDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C436FB29244FBBE40004738F /* AWSPinpointDialogViewController.swift */; };
 		CE0D41701C6A66E5006B91B5 /* AWSCore.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0D416F1C6A66E5006B91B5 /* AWSCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE0D42231C6A673E006B91B5 /* AWSCredentialsProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0D41851C6A673E006B91B5 /* AWSCredentialsProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CE0D42241C6A673E006B91B5 /* AWSCredentialsProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0D41861C6A673E006B91B5 /* AWSCredentialsProvider.m */; };
@@ -3903,6 +3905,8 @@
 		C436FB14243FC5310004738F /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPinpointSplashViewController.swift; sourceTree = "<group>"; };
 		C436FB2224478B0E0004738F /* InAppMessagingModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppMessagingModule.swift; sourceTree = "<group>"; };
+		C436FB27244FBBC60004738F /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		C436FB29244FBBE40004738F /* AWSPinpointDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPinpointDialogViewController.swift; sourceTree = "<group>"; };
 		CE0D416D1C6A66E5006B91B5 /* AWSCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWSCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE0D416F1C6A66E5006B91B5 /* AWSCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWSCore.h; sourceTree = "<group>"; };
 		CE0D41711C6A66E5006B91B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -6440,7 +6444,9 @@
 			isa = PBXGroup;
 			children = (
 				C436FB2124478B0E0004738F /* AWSPinpointSplashViewController.swift */,
+				C436FB29244FBBE40004738F /* AWSPinpointDialogViewController.swift */,
 				C436FB2224478B0E0004738F /* InAppMessagingModule.swift */,
+				C436FB27244FBBC60004738F /* Toast.swift */,
 				C436FB14243FC5310004738F /* UIColorExtensions.swift */,
 			);
 			path = InAppMessaging;
@@ -12996,9 +13002,11 @@
 				18798FF21DEF9F2B00BC419B /* AWSPinpointContext.m in Sources */,
 				18798FE91DEF9F2B00BC419B /* AWSPinpointTargetingModel.m in Sources */,
 				18798FE61DEF9F2B00BC419B /* AWSPinpointSessionClient.m in Sources */,
+				C436FB28244FBBC70004738F /* Toast.swift in Sources */,
 				18798FE21DEF9F2B00BC419B /* AWSPinpointNotificationManager.m in Sources */,
 				C436FB2324478B0F0004738F /* AWSPinpointSplashViewController.swift in Sources */,
 				18798FEF1DEF9F2B00BC419B /* AWSPinpointTargetingClient.m in Sources */,
+				C436FB2A244FBBE40004738F /* AWSPinpointDialogViewController.swift in Sources */,
 				18798FDE1DEF9F2B00BC419B /* AWSPinpointEvent.m in Sources */,
 				18798FED1DEF9F2B00BC419B /* AWSPinpointTargetingService.m in Sources */,
 				18798FF41DEF9F2B00BC419B /* AWSPinpointDateUtils.m in Sources */,
