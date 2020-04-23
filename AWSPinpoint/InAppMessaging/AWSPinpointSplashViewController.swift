@@ -118,9 +118,12 @@ public class AWSPinpointSplashViewController: UIViewController {
     
     func fetchImage(completion: @escaping (Bool) -> ()) {
         if let imageURL = model.backgroundImageURL {
-            backgroundImage.download(from: imageURL) { success in
-                completion(success)
-            }
+            ImageFetcher.download(from: imageURL, completion: { image in
+                self.backgroundImage.image = image
+                completion(true)
+            })
+        } else {
+            completion(false)
         }
     }
     

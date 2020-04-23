@@ -1,5 +1,5 @@
 //
-//  UIColorExtensions.swift
+//  InAppMessagingUtils.swift
 //  AWSPinpoint
 //
 //  Created by Guan, Zhinan on 4/9/20.
@@ -61,11 +61,9 @@ import Foundation
     }
 }
 
-extension UIImageView {
-    func download(from url: URL,
-                  contentMode mode: UIView.ContentMode = .scaleAspectFit,
-                  completion: @escaping (Bool) -> ()) {
-        contentMode = mode
+public class ImageFetcher {
+    static func download(from url: URL,
+                  completion: @escaping (UIImage?) -> ()) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard
                 let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
@@ -73,12 +71,11 @@ extension UIImageView {
                 let data = data, error == nil,
                 let image = UIImage(data: data)
                 else {
-                    completion(false)
+                    completion(nil)
                     return
                 }
             DispatchQueue.main.async() {
-                self.image = image
-                completion(true)
+                completion(image)
             }
         }.resume()
     }

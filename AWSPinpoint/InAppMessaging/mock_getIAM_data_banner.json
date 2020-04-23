@@ -1,0 +1,23 @@
+{
+  "banner": {
+  	"id": "44444444",
+    "name": "local.BannerIAM",
+  	"campaignId": "4444444abcdef",
+    "priority": 50,
+  	"uiConfiguration": {
+  		"title": "Amazon Prime Benefits",
+  		"message": "Free two-day delivery, Prime Video, Prime Music, Twitch Prime and so much more.",
+  		"backgroundHexColor": "#29d6e6",
+  		"backgroundImageURL": "https://drive.google.com/uc?export=download&id=1p4VCZLLOFGb6W_s3BZDAlFBqtsmVJHDi",
+  		"primaryButtonText": "Try Prime",
+  		"primaryButtonTextColor": "#FFFFFF",
+  		"primaryButtonHexColor": "#F3A721",
+  		"secondaryButtonText": "Not interested",
+  		"secondaryButtonTextColor": "#000000",
+  		"secondaryButtonHexColor": "#29d6e6"
+  	},
+  	"customParam": {
+  		"primaryButtonURL": "https://www.amazon.com/amazonprime"
+  	}
+  }
+}

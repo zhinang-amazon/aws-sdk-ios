@@ -7,10 +7,11 @@
 
 import UIKit
 
-enum InAppMessagingStyle {
-    case splash
-    case dialog
-    case banner
+enum InAppMessagingStyle: String {
+    case splash = "splash"
+    case dialog = "dialog"
+    case banner = "banner"
+    case unknown = "unknown"
 }
 
 @objc public protocol InAppMessagingDelegate {
@@ -93,6 +94,19 @@ enum InAppMessagingStyle {
         }
     }
     
+    public func localBannerIAM() {
+        if let path = Bundle(for: InAppMessagingModule.self).path(forResource: "mock_getIAM_data_banner", ofType: "json")
+        {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                let modelDict = try JSONSerialization.jsonObject(with: data)
+                self.displayIAM(data: modelDict as! [String : Any])
+            } catch {
+                print("invalid data from retrieveEligibleInAppMessages")
+            }
+        }
+    }
+    
     @objc public func saveAppStartIAM(data: [String: Any]) {
         self.savedAppStartData = data
     }
@@ -119,34 +133,18 @@ enum InAppMessagingStyle {
             if let topDialogVC = topVC as? AWSPinpointDialogViewController {
                 previousMessage = topDialogVC.model
             }
-            if let splashData = data["splash"] as? [String: Any] {
-                let model = AWSPinpointIAMModel(data: splashData)!
-                if let previousMessage = previousMessage {
-                    if previousMessage.priority <= model.priority {
-                        topVC?.dismiss(animated: true, completion: {
-                            self.displayMessage(model, style: .splash)
-                        })
-                    }
-                    // new message priority is low, no op
-                    return
+            let iamStyle = self.getStyle(from: data)
+            let model = AWSPinpointIAMModel(data: data[iamStyle.rawValue] as! [String : Any])!
+            if let previousMessage = previousMessage {
+                if previousMessage.priority <= model.priority {
+                    topVC?.dismiss(animated: true, completion: {
+                        self.displayMessage(model, style: iamStyle)
+                    })
                 }
-                self.displayMessage(model, style: .splash)
-            } else if let dialogData = data["dialog"] as? [String: Any] {
-                let model = AWSPinpointIAMModel(data: dialogData)!
-                if let previousMessage = previousMessage {
-                    if previousMessage.priority <= model.priority {
-                        topVC?.dismiss(animated: true, completion: {
-                            self.displayMessage(model, style: .dialog)
-                        })
-                    }
-                    // new message priority is low, no op
-                    return
-                }
-                self.displayMessage(model, style: .dialog)
-            } else if let bannerData = data["banner"] as? [String: Any] {
-                let model = AWSPinpointIAMModel(data: bannerData)!
-                self.displayMessage(model, style: .banner)
+                // new message priority is low, no op
+                return
             }
+            self.displayMessage(model, style: iamStyle)
         }
     }
     
@@ -157,15 +155,6 @@ enum InAppMessagingStyle {
             }
             self.displayIAM(data: savedAppStartData)
             self.savedAppStartData = nil
-        }
-    }
-    
-    public func displayToast(_ message: String, duration: Double, position: ToastPosition, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.main.async {
-            self.topViewController()?.view.makeToast(message,
-                                                     duration: duration,
-                                                     position: position,
-                                                     completion: completion)
         }
     }
     
@@ -200,12 +189,36 @@ enum InAppMessagingStyle {
                 })
                 break
             case .banner:
-                self.topViewController()?.view.makeToast(message.message, duration: 5.0, position: .top, title: message.title, completion: { didTap in
-                    if didTap {
-                        self.delegate.primaryButtonClicked(message: message)
-                    }
-                })
+                if let imageURL = message.backgroundImageURL {
+                    ImageFetcher.download(from: imageURL, completion: { image in
+                        self.topViewController()?.view.makeToast(message.message, duration: 5.0, position: .top, title: message.title, image: image, completion: { didTap in
+                                            if didTap {
+                                                self.delegate.primaryButtonClicked(message: message)
+                                            }
+                        })
+                    })
+                } else {
+                    self.topViewController()?.view.makeToast(message.message, duration: 5.0, position: .top, title: message.title, completion: { didTap in
+                                       if didTap {
+                                           self.delegate.primaryButtonClicked(message: message)
+                                       }
+                                   })
+                }
                 break
+            default:
+                break
+        }
+    }
+    
+    private func getStyle(from data: [String: Any]) -> InAppMessagingStyle {
+        if let _ = data["splash"] as? [String: Any] {
+            return .splash
+        } else if let _ = data["dialog"] as? [String: Any] {
+            return .dialog
+        } else if let _ = data["banner"] as? [String: Any] {
+            return .banner
+        } else {
+            return .unknown
         }
     }
     
